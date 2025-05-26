@@ -1,0 +1,223 @@
+.splash {
+  display: flex;
+  min-width: 90vw;
+  min-height: 90vh;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.splash .logo {
+  height: 40%;
+  width: 40%;
+  margin: -5%;
+}
+.splash .app-name {
+  color: #FFFFFF;
+}
+.splash .short-description {
+  color: #FFFFFF;
+  opacity: 50%;
+  width: 30%;
+  text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .splash .logo {
+    height: 50%;
+    width: 50%;
+  }
+  .splash .short-description {
+    width: 50%;
+  }
+}
+@media (max-width: 768px) {
+  .splash .logo {
+    height: 60%;
+    width: 60%;
+  }
+  .splash .short-description {
+    width: 70%;
+    font-size: 0.9rem;
+  }
+}
+@media (max-width: 480px) {
+  .splash .logo {
+    height: 70%;
+    width: 70%;
+  }
+  .splash .short-description {
+    width: 90%;
+    font-size: 0.85rem;
+  }
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/public/fonts/static/RalewayThin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/public/fonts/static/RalewayExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/public/fonts/static/RalewayLight.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/public/fonts/static/RalewayRegular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/public/fonts/static/RalewayMedium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/public/fonts/static/RalewaySemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/public/fonts/static/RalewayBold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/public/fonts/static/RalewayExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/public/fonts/static/RalewayBlack.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+.postgres {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 2rem;
+  gap: 1.5rem;
+}
+.postgres h1 {
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+.postgres .logo {
+  width: 100px;
+  height: 100px;
+}
+.postgres input {
+  height: 40px;
+  width: 300px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 24px;
+  color: var(--text-white);
+  font-weight: bold;
+}
+
+.red-btn {
+  background: var(--green-400);
+}
+
+body.light-theme {
+  --bg-color: #FAFAFC;
+  --red-100: #521414;
+  --red-200: #8F2424;
+  --red-300: #CC3333;
+  --red-400: #F53D3D;
+  --orange-100: #522914;
+  --orange-200: #8F4724;
+  --orange-300: #CC6633;
+  --orange-400: #F57A3D;
+  --yellow-100: #7A680C;
+  --yellow-200: #A38B10;
+  --yellow-300: #CCAD14;
+  --yellow-400: #F5D018;
+  --green-100: #085239;
+  --green-200: #0C7A56;
+  --green-300: #10A372;
+  --green-400: #12B880;
+  --blue-100: #153352;
+  --blue-200: #24598F;
+  --blue-300: #3380CC;
+  --blue-400: #3193F5;
+  --violet-100: #1F1452;
+  --violet-200: #36248F;
+  --violet-300: #4D33CC;
+  --violet-400: #5C3DF5;
+  --pink-100: #521433;
+  --pink-200: #8F2459;
+  --pink-300: #CC3380;
+  --pink-400: #F53D99;
+  --text-white: ;
+}
+
+body.dark-theme {
+  --bg-color: #0B0B0D;
+  --red-100: #F5ABAB;
+  --red-200: #F58787;
+  --red-300: #F56262;
+  --red-400: #F53D3D;
+  --orange-100: #F5C4AB;
+  --orange-200: #F5AB87;
+  --orange-300: #F59362;
+  --orange-400: #F57A3D;
+  --yellow-100: #F5E9AB;
+  --yellow-200: #F5E287;
+  --yellow-300: #F5DC62;
+  --yellow-400: #F5D018;
+  --green-100: #ABF5DC;
+  --green-200: #5AE0B4;
+  --green-300: #38E0A8;
+  --green-400: #12B880;
+  --blue-100: #ABD0F5;
+  --blue-200: #87BEF5;
+  --blue-300: #62ABF5;
+  --blue-400: #3193F5;
+  --violet-100: #B8ABF5;
+  --violet-200: #9987F5;
+  --violet-300: #7B62F5;
+  --violet-400: #5C3DF5;
+  --pink-100: #F5ABD0;
+  --pink-200: #F587BE;
+  --pink-300: #F562AB;
+  --pink-400: #F53D99;
+  --text-white: #ffffff;
+}
+
+body {
+  background-color: var(--bg-color);
+}
+
+* {
+  font-family: "Raleway";
+}
+
+/*# sourceMappingURL=index.css.map */

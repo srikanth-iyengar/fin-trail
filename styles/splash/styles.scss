@@ -1,0 +1,68 @@
+.splash {
+  display: flex;
+  min-width: 90vw;
+  min-height: 90vh;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .logo {
+    height: 40%;
+    width: 40%;
+    margin: -5%;
+  }
+
+  .app-name {
+    color: #FFFFFF;
+  }
+
+  .short-description {
+    color: #FFFFFF;
+    opacity: 50%;
+    width: 30%;
+    text-align: center;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .splash {
+    .logo {
+      height: 50%;
+      width: 50%;
+    }
+
+    .short-description {
+      width: 50%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .splash {
+    .logo {
+      height: 60%;
+      width: 60%;
+    }
+
+    .short-description {
+      width: 70%;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .splash {
+    .logo {
+      height: 70%;
+      width: 70%;
+    }
+
+    .short-description {
+      width: 90%;
+      font-size: 0.85rem;
+    }
+  }
+}
+

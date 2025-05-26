@@ -1,0 +1,32 @@
+.postgres {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 2rem;
+  gap: 1.5rem;
+
+  h1 {
+    color: #ffffff;
+    font-size: 1.75rem;
+    font-weight: bold;
+  }
+
+  .logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  input {
+    height: 40px;
+    width: 300px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  }
+}
+
