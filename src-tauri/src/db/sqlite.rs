@@ -9,14 +9,17 @@ pub struct SqliteDriver {
 
 impl SqliteDriver {
     pub async fn connect(conn_string: String) -> Result<SqliteDriver, DriverError> {
-        let conn = SqliteConnection::connect("fin-manager.db").await;
+        let conn = SqliteConnection::connect("sqlite:///data/data/in.srikanthk.finmanager/fin-manager.db").await;
 
         match conn {
             Ok(conn) => Ok(SqliteDriver {
                 conn,
                 connection_string: conn_string,
             }),
-            Err(_) => Err(DriverError::ConnectionError {}),
+            Err(err) => {
+                eprintln!("{err}");
+                Err(DriverError::ConnectionError {})
+            }
         }
     }
 }

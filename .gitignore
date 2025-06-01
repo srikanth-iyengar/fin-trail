@@ -1,3 +1,4 @@
+.style-build
 /dist/
 /target/
 /Cargo.lock

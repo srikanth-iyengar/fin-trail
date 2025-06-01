@@ -1,5 +1,6 @@
 use std::{fmt::Display, future::Future};
 
+#[derive(Debug)]
 pub enum DriverError {
     ConnectionError,
     NoRecordFound,
@@ -7,6 +8,7 @@ pub enum DriverError {
     UnknownError,
 }
 
+#[derive(Clone)]
 pub struct Column<'a> {
     pub field_name: &'a str,
     pub is_primary_key: bool,

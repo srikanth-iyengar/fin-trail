@@ -1,6 +1,7 @@
 mod app;
 mod components;
 mod routes;
+mod store;
 mod utils;
 
 use app::*;

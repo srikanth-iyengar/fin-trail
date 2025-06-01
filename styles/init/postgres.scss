@@ -8,14 +8,22 @@
   gap: 1.5rem;
 
   h1 {
-    color: #ffffff;
+    color: var(--text-white);
     font-size: 1.75rem;
     font-weight: bold;
+    text-align: center;
   }
 
   .logo {
     width: 100px;
     height: 100px;
+  }
+
+  p {
+    color: var(--text-white);
+    font-size: 1rem;
+    font-weight: lighter;
+    text-align: center;
   }
 
   input {
