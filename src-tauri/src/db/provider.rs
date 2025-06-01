@@ -2,7 +2,10 @@ use std::sync::{Arc, LazyLock, Mutex};
 
 use crate::db::{postgres::PostgresDriver, sqlite::SqliteDriver};
 
-use super::{driver::Driver, table::{ACCOUNT_TB, ACC_TABLE, REC_TX_TABLE, REC_TX_TB, TRANSACTION_TB, TX_TABLE}};
+use super::{
+    driver::Driver,
+    table::{ACCOUNT_TB, ACC_TABLE, REC_TX_TABLE, REC_TX_TB, TRANSACTION_TB, TX_TABLE},
+};
 
 pub enum DbProvider {
     Sqlite(SqliteDriver),
@@ -50,15 +53,27 @@ pub async fn initialize_tables() {
         let mut locked_driver = arc_driver.lock().expect("failed to lock db");
         match &mut *locked_driver {
             DbProvider::Sqlite(driver) => {
-                driver.create_table(TRANSACTION_TB.to_string(), TX_TABLE.to_vec()).await;
-                driver.create_table(ACCOUNT_TB.to_string(), ACC_TABLE.to_vec()).await;
-                driver.create_table(REC_TX_TB.to_string(), REC_TX_TABLE.to_vec()).await;
-            },
+                driver
+                    .create_table(TRANSACTION_TB.to_string(), TX_TABLE.to_vec())
+                    .await;
+                driver
+                    .create_table(ACCOUNT_TB.to_string(), ACC_TABLE.to_vec())
+                    .await;
+                driver
+                    .create_table(REC_TX_TB.to_string(), REC_TX_TABLE.to_vec())
+                    .await;
+            }
             DbProvider::Postgres(driver) => {
-                driver.create_table(TRANSACTION_TB.to_string(), TX_TABLE.to_vec()).await;
-                driver.create_table(ACCOUNT_TB.to_string(), ACC_TABLE.to_vec()).await;
-                driver.create_table(REC_TX_TB.to_string(), REC_TX_TABLE.to_vec()).await;
-            },
+                driver
+                    .create_table(TRANSACTION_TB.to_string(), TX_TABLE.to_vec())
+                    .await;
+                driver
+                    .create_table(ACCOUNT_TB.to_string(), ACC_TABLE.to_vec())
+                    .await;
+                driver
+                    .create_table(REC_TX_TB.to_string(), REC_TX_TABLE.to_vec())
+                    .await;
+            }
             _ => {}
         }
     }

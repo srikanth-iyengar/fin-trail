@@ -2,9 +2,10 @@ use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 
 use super::driver::{generate_create_table_query, Driver, DriverError};
 
+#[derive(Clone)]
 pub struct PostgresDriver {
     connection_string: String,
-    pool: Pool<Postgres>,
+    pub pool: Pool<Postgres>,
 }
 
 impl PostgresDriver {

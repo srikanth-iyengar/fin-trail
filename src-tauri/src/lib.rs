@@ -1,6 +1,7 @@
 pub mod db;
 pub mod store_comm;
 
+use db::crud_wrapper::{net_worth_wrapper, tx_amount_over_period};
 use db::provider::{get_driver, initialize_tables, is_db_connected};
 use tauri_plugin_os::platform;
 use tauri_plugin_store::StoreExt;
@@ -36,7 +37,12 @@ pub fn run() {
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![connect_to_db, tauri_platform])
+        .invoke_handler(tauri::generate_handler![
+            connect_to_db,
+            tauri_platform,
+            net_worth_wrapper,
+            tx_amount_over_period
+        ])
         .setup(|app| {
             let result = app.store("default.json");
 

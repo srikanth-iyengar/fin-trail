@@ -1,0 +1,83 @@
+.side-bar {
+  display: none;
+  width: 18%;
+  max-width: 240px;
+  height: 100vh;
+  padding: 2rem 1.5rem;
+  background-color: var(--bg-color);
+  color: var(--text-white);
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.4s ease-in;
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+
+    .logo {
+      width: 32px;
+      height: auto;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text-white);
+    }
+  }
+
+  .item {
+    margin: 0.5rem 0rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1rem;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    background: transparent;
+
+    .icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      filter: var(--icon);
+    }
+
+    a {
+      color: var(--text-white);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    &:hover {
+      background: var(--green-gradient);
+      transform: scale(1.03);
+    }
+
+    &.active {
+      background: var(--green-gradient);
+      transform: scale(1.03);
+    }
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .side-bar {
+    display: block;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+

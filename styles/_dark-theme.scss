@@ -1,6 +1,6 @@
 @import "design-token";
 
-$dark-theme: (
+$theme: (
   background-color: map-get($backgroundMap, dark),
   red-100: map-get($colorRedMap, 100),
   red-200: map-get($colorRedMap, 200),
@@ -30,5 +30,11 @@ $dark-theme: (
   pink-200: map-get($colorPinkMap, 200),
   pink-300: map-get($colorPinkMap, 300),
   pink-400: map-get($colorPinkMap, 400),
-  text: #ffffff,
+  text: #FAFAFA,
+  icon: invert(100%) sepia(0%) saturate(0%) hue-rotate(200deg) brightness(97%) contrast(100%),
+  green-gradient: linear-gradient(0.25turn, #0A664F, #14CC9E),
+  violet-gradient: linear-gradient(0.25turn, #6B4DFF, #9784F4),
+  blue-gradient: linear-gradient(0.25turn, #457BE6, #4CC3FF),
+  orange-gradient: linear-gradient(0.25turn, #E67B45, #F29F30),
+  red-gradient: linear-gradient(0.25turn, #FF4060, #F29F30),
 );

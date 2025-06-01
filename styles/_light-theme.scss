@@ -1,6 +1,6 @@
 @import 'design-token.scss';
 
-$light-theme: (
+$theme: (
   background-color: map-get($backgroundMap, light),
   red-100: map-get($colorRedMap, 700),
   red-200: map-get($colorRedMap, 600),
@@ -30,4 +30,11 @@ $light-theme: (
   pink-200: map-get($colorPinkMap, 600),
   pink-300: map-get($colorPinkMap, 500),
   pink-400: map-get($colorPinkMap, 400),
+  text: #18191A,
+  icon: invert(6%) sepia(7%) saturate(748%) hue-rotate(175deg) brightness(97%) contrast(89%),
+  green-gradient: linear-gradient(#99FFBB, #B3E6FF),
+  violet-gradient: linear-gradient(#CCDDFF, #D5CCFF),
+  blue-gradient: linear-gradient(#CCDDFF, #B3FFFF),
+  orange-gradient: linear-gradient(#FFCCB3, #FFF799),
+  red-gradient: linear-gradient(#FFCCE6, #FFB3B3),
 );

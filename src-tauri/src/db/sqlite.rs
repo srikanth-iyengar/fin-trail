@@ -4,12 +4,14 @@ use super::driver::{generate_create_table_query, Driver, DriverError};
 
 pub struct SqliteDriver {
     connection_string: String,
-    conn: SqliteConnection,
+    pub conn: SqliteConnection,
 }
 
 impl SqliteDriver {
     pub async fn connect(conn_string: String) -> Result<SqliteDriver, DriverError> {
-        let conn = SqliteConnection::connect("sqlite:///data/data/in.srikanthk.finmanager/fin-manager.db").await;
+        let conn =
+            SqliteConnection::connect("sqlite:///data/data/in.srikanthk.finmanager/fin-manager.db")
+                .await;
 
         match conn {
             Ok(conn) => Ok(SqliteDriver {

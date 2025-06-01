@@ -1,24 +1,41 @@
-@import 'design-token.scss';
-@import 'dark-theme.scss';
-@import 'light-theme.scss';
-@import 'splash/styles.scss';
-@import 'fonts.scss';
-@import 'init/postgres.scss';
-@import 'components/button.scss';
-@import 'theme.scss';
+@use 'light-theme' as light;
+@use 'dark-theme' as dark;
+@use 'design-token.scss';
+@use 'splash/styles.scss';
+@use '_fonts.scss';
+@use 'init/postgres.scss';
+@use 'components/button.scss';
+@use 'components/side-bar.scss';
+@use 'route/home/root';
+@use 'components/home-layout.scss';
+@import '_theme.scss';
+
+@font-face {
+  font-family: 'Raleway Regular';
+  src: url('/public/fonts/Raleway-VariableFont_wght.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
 
 body.light-theme {
-  @include apply-theme($light-theme)
+  @include apply-theme(light.$theme)
 }
 
 body.dark-theme {
-  @include apply-theme($dark-theme)
+  @include apply-theme(dark.$theme)
 }
 
 body {
   background-color: var(--bg-color);
+  font-family: "Raleway Regular", sans-serif;
 }
 
-* {
-  font-family: "Raleway";
+h1, h2, h3, h4, h5, h6, p, a, code {
+  color: var(--text-white);
+  margin: 0;
+  padding: 0.5rem;
+}
+
+.icon {
+  filter: var(--icon);
 }
