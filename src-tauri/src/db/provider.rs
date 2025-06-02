@@ -1,4 +1,5 @@
-use std::sync::{Arc, LazyLock, Mutex};
+use std::sync::{Arc, LazyLock};
+use tokio::sync::Mutex;
 
 use crate::db::{postgres::PostgresDriver, sqlite::SqliteDriver};
 
@@ -25,7 +26,7 @@ pub async fn get_driver(conn_string: Option<String>) -> Arc<Mutex<DbProvider>> {
     let arc = DRIVER.clone();
 
     {
-        let mut locked = arc.lock().expect("Failed to lock DB driver mutex");
+        let mut locked = arc.lock().await;
         if matches!(*locked, DbProvider::Unknown) {
             *locked = match platform {
                 "android" => match SqliteDriver::connect(String::from("")).await {
@@ -50,7 +51,7 @@ pub async fn get_driver(conn_string: Option<String>) -> Arc<Mutex<DbProvider>> {
 pub async fn initialize_tables() {
     let arc_driver = get_driver(None).await;
     {
-        let mut locked_driver = arc_driver.lock().expect("failed to lock db");
+        let mut locked_driver = arc_driver.lock().await;
         match &mut *locked_driver {
             DbProvider::Sqlite(driver) => {
                 driver
@@ -79,9 +80,9 @@ pub async fn initialize_tables() {
     }
 }
 
-pub fn is_db_connected() -> bool {
+pub async fn is_db_connected() -> bool {
     let arc = DRIVER.clone();
 
-    let locked = arc.lock().expect("Failed to lock DB driver mutex");
+    let locked = arc.lock().await;
     !matches!(*locked, DbProvider::Unknown)
 }

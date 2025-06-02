@@ -6,7 +6,7 @@ pub(super) const REC_TX_TB: &str = "fin_recurrenttransaction";
 
 pub const DOUBLE: &str = "double precision";
 
-pub(super) const TX_TABLE: [Column; 6] = [
+pub(super) const TX_TABLE: [Column; 7] = [
     Column {
         field_name: "tx_id",
         data_type: "varchar(100)",
@@ -14,8 +14,8 @@ pub(super) const TX_TABLE: [Column; 6] = [
         is_primary_key: true,
     },
     Column {
-        field_name: "timestamp",
-        data_type: "int",
+        field_name: "ts",
+        data_type: "bigint",
         is_not_null: false,
         is_primary_key: false,
     },
@@ -43,6 +43,12 @@ pub(super) const TX_TABLE: [Column; 6] = [
         is_primary_key: false,
         is_not_null: false,
     },
+    Column {
+        field_name: "acc_id",
+        data_type: "varchar(100)",
+        is_primary_key: false,
+        is_not_null: false
+    }
 ];
 
 pub(super) const ACC_TABLE: [Column; 4] = [

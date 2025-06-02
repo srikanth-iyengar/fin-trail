@@ -1,4 +1,4 @@
-use chrono::{Datelike, Local, NaiveDate, NaiveDateTime, NaiveTime, TimeZone};
+use chrono::{Datelike, Local, NaiveDate, NaiveDateTime, NaiveTime};
 use leptos::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -28,7 +28,7 @@ pub fn RootHome() -> impl IntoView {
 
     let income_ref = LocalResource::new(move || {
         invoke(
-            "tx_amount_over_period",
+            "transaction_amount_over_period",
             wasm_bindgen::JsValue::from_serde(&TxAmountQuery {
                 from_time: ts_start_of_month as u64,
                 to_time: now as u64,
@@ -39,7 +39,7 @@ pub fn RootHome() -> impl IntoView {
     });
     let expense_ref = LocalResource::new(move || {
         invoke(
-            "tx_amount_over_period",
+            "transaction_amount_over_period",
             wasm_bindgen::JsValue::from_serde(&TxAmountQuery {
                 from_time: ts_start_of_month as u64,
                 to_time: now as u64,
@@ -48,7 +48,7 @@ pub fn RootHome() -> impl IntoView {
             .unwrap(),
         )
     });
-    let net_worth_ref = LocalResource::new(move || invokeNoArgs("net_worth_wrapper"));
+    let net_worth_ref = LocalResource::new(move || invokeNoArgs("net_worth"));
 
     let income = move || {
         format!(

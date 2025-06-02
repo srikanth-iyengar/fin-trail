@@ -1,17 +1,17 @@
 pub mod db;
 pub mod store_comm;
 
-use db::crud_wrapper::{net_worth_wrapper, tx_amount_over_period};
+use db::crud::{net_worth, transaction_amount_over_period, add_transaction};
 use db::provider::{get_driver, initialize_tables, is_db_connected};
 use tauri_plugin_os::platform;
 use tauri_plugin_store::StoreExt;
 
 #[tauri::command]
-fn connect_to_db(conn_string: Option<String>) -> &'static str {
-    tauri::async_runtime::block_on(get_driver(conn_string));
-    tauri::async_runtime::block_on(initialize_tables());
+async fn connect_to_db(conn_string: Option<String>) -> &'static str {
+    get_driver(conn_string).await;
+    initialize_tables().await;
 
-    if is_db_connected() {
+    if is_db_connected().await {
         return "connected";
     }
     "disconnected"
@@ -40,8 +40,9 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             connect_to_db,
             tauri_platform,
-            net_worth_wrapper,
-            tx_amount_over_period
+            net_worth,
+            transaction_amount_over_period,
+            add_transaction
         ])
         .setup(|app| {
             let result = app.store("default.json");

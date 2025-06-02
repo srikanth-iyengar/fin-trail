@@ -18,6 +18,7 @@ leptos-routes-macro = "0.3.1"
 leptos_toaster = "0.2.0"
 leptos-use = "0.15.7"
 chrono = "0.4.41"
+leptos-chartistry = "0.2.1"
 
 [workspace]
 members = ["src-tauri"]
