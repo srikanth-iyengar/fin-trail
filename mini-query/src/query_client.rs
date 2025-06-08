@@ -1,12 +1,14 @@
 use std::collections::HashMap;
 
-use leptos::prelude::{StorageAccess, provide_context};
+use leptos::prelude::provide_context;
 
 use crate::{
-    mutation_observer::{MutationObserver, SafeFetcher},
+    data_fetcher::DataFetcher,
+    mutation_observer::MutationObserver,
     query_cache::{QueryCache, QueryKey, QueryValue},
 };
 
+#[derive(Clone)]
 pub struct QueryClient {
     pub(crate) query_cache: QueryCache,
     pub(crate) mutation_observer: MutationObserver,
@@ -29,7 +31,7 @@ impl QueryClient {
     pub fn register_data_fetcher(
         &mut self,
         query_key: Box<dyn QueryKey>,
-        fetcher: Box<SafeFetcher>,
+        fetcher: DataFetcher,
     ) -> Option<&QueryValue> {
         let key = &query_key.key();
         self.mutation_observer.register_mutation(query_key, fetcher);
@@ -41,14 +43,21 @@ impl QueryClient {
         self.query_cache.get(*key)
     }
 
-    pub fn fetch_first_value(&mut self, key: i32) {
+    fn fetch_first_value(&mut self, key: i32) {
         if self.query_cache.cache.contains_key(&key) {
             return;
         }
 
         let data_fetcher = self.mutation_observer.get_data_fetcher(key);
-        let value = data_fetcher.unwrap().fetch();
-        self.query_cache.put(key, value);
+        self.query_cache.put(key, Box::new(data_fetcher.unwrap()()));
+    }
+
+    pub fn invalidate_cache(&mut self, query_key: Box<dyn QueryKey>) {
+        let key = query_key.key();
+
+        let data_fetcher = self.mutation_observer.get_data_fetcher(key);
+
+        self.query_cache.put(key, Box::new(data_fetcher.unwrap()()));
     }
 }
 
