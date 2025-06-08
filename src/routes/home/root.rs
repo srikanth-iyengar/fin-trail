@@ -2,16 +2,16 @@ use chrono::{Datelike, Local, NaiveDate, NaiveDateTime, NaiveTime};
 use leptos::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::utils::{invoke, invokeNoArgs};
+use crate::hooks::transaction::{fetch_expense, fetch_income, fetch_networth};
 
 #[derive(Serialize, Deserialize)]
 pub struct TxAmountQuery {
     #[serde(rename = "fromTime")]
-    from_time: u64,
+    pub from_time: u64,
     #[serde(rename = "toTime")]
-    to_time: u64,
+    pub to_time: u64,
     #[serde(rename = "direction")]
-    direction: bool,
+    pub direction: bool,
 }
 
 #[component]
@@ -26,58 +26,15 @@ pub fn RootHome() -> impl IntoView {
         first_day_of_month.and_utc().timestamp_millis()
     };
 
-    let income_ref = LocalResource::new(move || {
-        invoke(
-            "transaction_amount_over_period",
-            wasm_bindgen::JsValue::from_serde(&TxAmountQuery {
-                from_time: ts_start_of_month as u64,
-                to_time: now as u64,
-                direction: true,
-            })
-            .unwrap(),
-        )
-    });
-    let expense_ref = LocalResource::new(move || {
-        invoke(
-            "transaction_amount_over_period",
-            wasm_bindgen::JsValue::from_serde(&TxAmountQuery {
-                from_time: ts_start_of_month as u64,
-                to_time: now as u64,
-                direction: false,
-            })
-            .unwrap(),
-        )
-    });
-    let net_worth_ref = LocalResource::new(move || invokeNoArgs("net_worth"));
+    let income_ref = LocalResource::new(move || fetch_income(ts_start_of_month as u64, now as u64));
+    let expense_ref =
+        LocalResource::new(move || fetch_expense(ts_start_of_month as u64, now as u64));
+    let net_worth_ref = LocalResource::new(fetch_networth);
 
-    let income = move || {
-        format!(
-            "{:.2} INR",
-            income_ref
-                .get()
-                .map(|value| value.as_f64().unwrap_or(0_f64))
-                .unwrap_or(0_f64)
-        )
-    };
+    let income = move || format!("{:.2} INR", income_ref.get().unwrap_or(0_f64));
 
-    let expense = move || {
-        format!(
-            "{:.2} INR",
-            expense_ref
-                .get()
-                .map(|value| value.as_f64().unwrap_or(0_f64))
-                .unwrap_or(0_f64)
-        )
-    };
-    let net_worth = move || {
-        format!(
-            "{:.2} INR",
-            net_worth_ref
-                .get()
-                .map(|value| value.as_f64().unwrap_or(0_f64))
-                .unwrap_or(0_f64)
-        )
-    };
+    let expense = move || format!("{:.2} INR", expense_ref.get().unwrap_or(0_f64));
+    let net_worth = move || format!("{:.2} INR", net_worth_ref.get().unwrap_or(0_f64));
 
     view! {
         <div class="home">

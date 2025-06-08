@@ -1,14 +1,15 @@
 use std::{any::Any, collections::HashMap, sync::Arc};
 
-pub trait QueryKey {
-    fn key(&self) -> i32;
-}
-
 pub type QueryValue = Arc<dyn Any + Send + Sync>;
 
 #[derive(Clone)]
 pub struct QueryCache {
     pub(crate) cache: HashMap<i32, Box<QueryValue>>,
+}
+
+pub trait QueryKey: std::fmt::Debug + Send + Sync {
+    fn clone_box(&self) -> Box<dyn QueryKey>;
+    fn key(&self) -> i32;
 }
 
 impl QueryCache {

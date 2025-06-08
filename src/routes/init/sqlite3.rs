@@ -24,7 +24,7 @@ pub fn SqliteInit() -> impl IntoView {
     let proceed_action = Action::new(move |_: &String| {
         let nav = navigate.clone();
         async move {
-            let store = store.get().unwrap().take();
+            let store = store.get().unwrap();
             store.set("is_onboarded", true.into());
             invokeNoArgsNoPromise("connect_to_db");
             nav("/home/root", NavigateOptions::default());

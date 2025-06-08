@@ -7,6 +7,7 @@ use crate::routes::init::postgres;
 use crate::routes::init::sqlite3;
 use crate::routes::splash;
 use leptos::*;
+use leptos_fetch::QueryClient;
 use leptos_router::{
     components::{ParentRoute, Route, Router, Routes},
     path,
@@ -18,6 +19,8 @@ use sqlite3::SqliteInit;
 
 #[component]
 pub fn App() -> impl IntoView {
+    QueryClient::new().provide();
+
     view! {
             <Router>
                 <Routes fallback=Splash>

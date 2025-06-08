@@ -1,7 +1,6 @@
+use std::pin::Pin;
+
 use crate::query_cache::QueryValue;
 
 pub type DataFetcher = fn() -> QueryValue;
-
-// pub trait DataFetcher {
-//     fn fetch(&self) -> Box<QueryValue>;
-// }
+pub type AsyncDataFetcher = fn() -> Pin<Box<dyn Future<Output = QueryValue>>>;

@@ -1,3 +1,4 @@
+use crate::store;
 use crate::utils::invoke;
 use crate::{components::button::Button, store::load};
 use leptos::prelude::*;
@@ -22,7 +23,7 @@ pub fn PostgresInit() -> impl IntoView {
     let proceed_action = Action::new(move |_: &String| {
         let nav = navigate.clone();
         async move {
-            let store = store.get().unwrap().take();
+            let store = store.get().unwrap();
             store.set("is_onboarded", true.into());
             store.set("pg_url", connection_string.get().into());
             nav("/home/root", NavigateOptions::default());
