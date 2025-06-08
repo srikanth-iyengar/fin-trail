@@ -6,7 +6,7 @@ use crate::routes::home::transaction::Transaction;
 use crate::routes::init::postgres;
 use crate::routes::init::sqlite3;
 use crate::routes::splash;
-use leptos::prelude::*;
+use leptos::*;
 use leptos_router::{
     components::{ParentRoute, Route, Router, Routes},
     path,
@@ -19,27 +19,27 @@ use sqlite3::SqliteInit;
 #[component]
 pub fn App() -> impl IntoView {
     view! {
-        <Router>
-            <Routes fallback=Splash>
-                <Route
-                    path=path!("/splash")
-                    view=Splash
-                />
-                <Route
-                    path=path!("/init/postgres")
-                    view=PostgresInit
-                />
-                <Route
-                    path=path!("/init/sqlite")
-                    view=SqliteInit
-                />
-                <ParentRoute path=path!("/home") view=HomeLayout>
-                    <Route path=path!("/root") view=RootHome />
-                    <Route path=path!("/tx") view=Transaction />
-                    <Route path=path!("/accounts") view=Account />
-                    <Route path=path!("/recurring-transactions") view=RecurringTransaction />
-                </ParentRoute>
-            </Routes>
-        </Router>
+            <Router>
+                <Routes fallback=Splash>
+                    <Route
+                        path=path!("/splash")
+                        view=Splash
+                    />
+                    <Route
+                        path=path!("/init/postgres")
+                        view=PostgresInit
+                    />
+                    <Route
+                        path=path!("/init/sqlite")
+                        view=SqliteInit
+                    />
+                    <ParentRoute path=path!("/home") view=HomeLayout>
+                        <Route path=path!("/root") view=RootHome />
+                        <Route path=path!("/tx") view=Transaction />
+                        <Route path=path!("/accounts") view=Account />
+                        <Route path=path!("/recurring-transactions") view=RecurringTransaction />
+                    </ParentRoute>
+                </Routes>
+            </Router>
     }
 }

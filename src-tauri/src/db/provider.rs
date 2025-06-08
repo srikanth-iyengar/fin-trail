@@ -1,7 +1,10 @@
 use std::sync::{Arc, LazyLock};
 use tokio::sync::Mutex;
 
-use crate::db::{postgres::PostgresDriver, sqlite::SqliteDriver};
+use crate::{
+    db::{postgres::PostgresDriver, sqlite::SqliteDriver},
+    match_driver,
+};
 
 use super::{
     driver::Driver,
@@ -9,10 +12,17 @@ use super::{
 };
 
 pub enum DbProvider {
+    #[cfg(target_os = "android")]
     Sqlite(SqliteDriver),
+    #[cfg(target_os = "linux")]
     Postgres(PostgresDriver),
     Unknown,
 }
+
+#[cfg(target_os = "android")]
+pub type SqlxType = sqlx::Sqlite;
+#[cfg(target_os = "linux")]
+pub type SqlxType = sqlx::Postgres;
 
 fn get_host_information() -> &'static str {
     tauri_plugin_os::platform()
@@ -29,6 +39,7 @@ pub async fn get_driver(conn_string: Option<String>) -> Arc<Mutex<DbProvider>> {
         let mut locked = arc.lock().await;
         if matches!(*locked, DbProvider::Unknown) {
             *locked = match platform {
+                #[cfg(target_os = "android")]
                 "android" => match SqliteDriver::connect(String::from("")).await {
                     Ok(driver) => DbProvider::Sqlite(driver),
                     Err(err) => {
@@ -36,6 +47,7 @@ pub async fn get_driver(conn_string: Option<String>) -> Arc<Mutex<DbProvider>> {
                         DbProvider::Unknown
                     }
                 },
+                #[cfg(target_os = "linux")]
                 "linux" => match PostgresDriver::connect(conn_string.unwrap()).await {
                     Ok(driver) => DbProvider::Postgres(driver),
                     Err(_) => DbProvider::Unknown,
@@ -52,31 +64,17 @@ pub async fn initialize_tables() {
     let arc_driver = get_driver(None).await;
     {
         let mut locked_driver = arc_driver.lock().await;
-        match &mut *locked_driver {
-            DbProvider::Sqlite(driver) => {
-                driver
-                    .create_table(TRANSACTION_TB.to_string(), TX_TABLE.to_vec())
-                    .await;
-                driver
-                    .create_table(ACCOUNT_TB.to_string(), ACC_TABLE.to_vec())
-                    .await;
-                driver
-                    .create_table(REC_TX_TB.to_string(), REC_TX_TABLE.to_vec())
-                    .await;
-            }
-            DbProvider::Postgres(driver) => {
-                driver
-                    .create_table(TRANSACTION_TB.to_string(), TX_TABLE.to_vec())
-                    .await;
-                driver
-                    .create_table(ACCOUNT_TB.to_string(), ACC_TABLE.to_vec())
-                    .await;
-                driver
-                    .create_table(REC_TX_TB.to_string(), REC_TX_TABLE.to_vec())
-                    .await;
-            }
-            _ => {}
-        }
+        match_driver!(&mut *locked_driver, db_driver -> {
+            db_driver
+                .create_table(TRANSACTION_TB.to_string(), TX_TABLE.to_vec())
+                .await;
+            db_driver
+               .create_table(ACCOUNT_TB.to_string(), ACC_TABLE.to_vec())
+               .await;
+            db_driver
+               .create_table(REC_TX_TB.to_string(), REC_TX_TABLE.to_vec())
+               .await;
+        });
     }
 }
 

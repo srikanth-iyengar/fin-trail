@@ -19,6 +19,8 @@ leptos_toaster = "0.2.0"
 leptos-use = "0.15.7"
 chrono = "0.4.41"
 leptos-chartistry = "0.2.1"
+leptos_meta = { version = "0.8.2", features=[] }
+leptos-fetch = { version = "0.4.2", features=[ "devtools" ] }
 
 [workspace]
-members = ["src-tauri"]
+members = [ "mini-query","src-tauri"]

@@ -8,6 +8,7 @@
 @use 'components/side-bar.scss';
 @use 'route/home/root';
 @use 'components/home-layout.scss';
+@use 'route/home/transaction';
 @import '_theme.scss';
 
 @font-face {

@@ -13,6 +13,7 @@ edition = "2021"
 # This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
 name = "fin_manager_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
+proc-mactor=true
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
@@ -30,4 +31,6 @@ tauri-plugin-sql = "2"
 async-std = "1.13.1"
 tokio = { version = "1.45.1", features = ["sync"] }
 uuid = { version = "1.17.0", features = ["v4"] }
+syn = "2.0"
+quote = "1.0"
 

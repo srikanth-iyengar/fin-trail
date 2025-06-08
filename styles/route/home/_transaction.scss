@@ -1,0 +1,51 @@
+.tx {
+  padding: 2rem 1.5rem;
+
+  .tabs {
+    display: flex;
+    gap: 2rem;
+    padding-top: 1.5rem;
+    padding-left: 0.5rem;
+
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 0;
+      border-bottom: 0.25rem solid var(--bg-color);
+      padding-bottom: 0.25rem;
+      cursor: pointer;
+      transition: border-color 0.3s ease, transform 0.2s ease;
+
+      .tag {
+        display: flex;
+        padding: 0.25rem 0.5rem;
+        justify-content: center;
+        align-items: center;
+        background: var(--green-700);
+        border-radius: 13px;
+        color: var(--green-100);
+        font-weight: 500;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+
+      &.active {
+        border-color: var(--green-500);
+
+        .tag {
+          background: var(--green-600);
+        }
+      }
+
+      &:hover {
+        border-color: var(--green-300);
+        transform: translateY(-2px);
+
+        .tag {
+          background: var(--green-600);
+        }
+      }
+    }
+  }
+}
+

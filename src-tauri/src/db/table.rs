@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 use super::driver::Column;
 
 pub(super) const TRANSACTION_TB: &str = "fin_transaction";
@@ -5,6 +7,21 @@ pub(super) const ACCOUNT_TB: &str = "fin_account";
 pub(super) const REC_TX_TB: &str = "fin_recurrenttransaction";
 
 pub const DOUBLE: &str = "double precision";
+
+#[derive(Serialize, Deserialize, sqlx::FromRow)]
+pub struct Transaction {
+    pub tx_id: String,
+    pub ts: i64,
+    pub amount: f64,
+    pub direction: bool,
+    pub is_synced: bool,
+    pub tags: String,
+    pub acc_id: String,
+}
+
+pub struct Account {
+    acc_id: String,
+}
 
 pub(super) const TX_TABLE: [Column; 7] = [
     Column {
@@ -47,8 +64,8 @@ pub(super) const TX_TABLE: [Column; 7] = [
         field_name: "acc_id",
         data_type: "varchar(100)",
         is_primary_key: false,
-        is_not_null: false
-    }
+        is_not_null: false,
+    },
 ];
 
 pub(super) const ACC_TABLE: [Column; 4] = [

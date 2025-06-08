@@ -4,7 +4,7 @@ use super::driver::{generate_create_table_query, Driver, DriverError};
 
 pub struct SqliteDriver {
     connection_string: String,
-    pub conn: SqlitePool,
+    pub pool: SqlitePool,
 }
 
 impl SqliteDriver {
@@ -13,8 +13,8 @@ impl SqliteDriver {
             SqlitePool::connect("sqlite:///data/data/in.srikanthk.finmanager/fin-manager.db").await;
 
         match conn {
-            Ok(conn) => Ok(SqliteDriver {
-                conn,
+            Ok(pool) => Ok(SqliteDriver {
+                pool,
                 connection_string: conn_string,
             }),
             Err(err) => {
@@ -32,7 +32,7 @@ impl Driver for SqliteDriver {
         cols: Vec<super::driver::Column<'_>>,
     ) -> Option<DriverError> {
         let query = generate_create_table_query(table_name, cols);
-        let result = sqlx::query(query.as_str()).execute(&self.conn).await;
+        let result = sqlx::query(query.as_str()).execute(&self.pool).await;
         match result {
             Ok(_) => None,
             Err(_) => Some(DriverError::UnknownError),

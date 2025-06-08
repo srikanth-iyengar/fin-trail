@@ -1,4 +1,6 @@
-use std::{fmt::Display, future::Future};
+use std::future::Future;
+
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug)]
 pub enum DriverError {
@@ -16,24 +18,31 @@ pub struct Column<'a> {
     pub data_type: &'a str,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Value {
+    StringVal(String),
+    Number(i64),
+    Boolean(bool),
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub enum Operator {
-    Eq,
-    Neq,
-    Gt,
-    Gte,
-    Lt,
-    Lte,
-    Like,
-    In,
-    Between,
+    Eq(Value),
+    Neq(Value),
+    Gt(Value),
+    Gte(Value),
+    Lt(Value),
+    Lte(Value),
+    Like(Value),
+    In(Value),
+    Between(Value, Value),
     IsNull,
     IsNotNull,
 }
 
-#[derive(Debug)]
-pub struct Condition<'a> {
-    pub field: &'a str,
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Condition {
+    pub field: String,
     pub operator: Operator,
 }
 
@@ -45,30 +54,78 @@ pub trait Driver {
     ) -> impl Future<Output = Option<DriverError>>;
 }
 
-pub fn build_where_clause(conditions: Vec<Condition>) -> String {
+pub fn build_where_clause(conditions: Vec<Condition>) -> (String, Vec<Value>) {
     let mut clauses = Vec::new();
 
+    let mut param_val = 1;
+    let mut values: Vec<Value> = Vec::new();
     for cond in conditions {
         let clause = match cond.operator {
-            Operator::Eq => format!("{} = ?", cond.field),
-            Operator::Neq => format!("{} != ?", cond.field),
-            Operator::Gt => format!("{} > ?", cond.field),
-            Operator::Gte => format!("{} >= ?", cond.field),
-            Operator::Lt => format!("{} < ?", cond.field),
-            Operator::Lte => format!("{} <= ?", cond.field),
-            Operator::Like => format!("{} LIKE ?", cond.field),
-            Operator::In => format!("{} IN (?)", cond.field),
-            Operator::Between => format!("{} BETWEEN ? AND ?", cond.field,),
-            Operator::IsNull => format!("{} IS NULL", cond.field),
-            Operator::IsNotNull => format!("{} IS NOT NULL", cond.field),
+            Operator::Eq(val) => {
+                values.push(val);
+                param_val += 1;
+                format!("{} = ${}", cond.field, param_val)
+            }
+            Operator::Neq(val) => {
+                values.push(val);
+                param_val += 1;
+                format!("{} != ${}", cond.field, param_val)
+            }
+            Operator::Gt(val) => {
+                values.push(val);
+                param_val += 1;
+                format!("{} > ${}", cond.field, param_val)
+            }
+            Operator::Gte(val) => {
+                values.push(val);
+                param_val += 1;
+                format!("{} >= ${}", cond.field, param_val)
+            }
+            Operator::Lt(val) => {
+                values.push(val);
+                param_val += 1;
+                format!("{} < ${}", cond.field, param_val)
+            }
+            Operator::Lte(val) => {
+                values.push(val);
+                param_val += 1;
+                format!("{} <= ${}", cond.field, param_val)
+            }
+            Operator::Like(val) => {
+                values.push(val);
+                param_val += 1;
+                format!("{} LIKE ${}", cond.field, param_val)
+            }
+            Operator::In(val) => {
+                values.push(val);
+                param_val += 1;
+                format!("{} IN (${})", cond.field, param_val)
+            }
+            Operator::Between(start, end) => {
+                values.push(start);
+                values.push(end);
+                param_val += 2;
+                format!(
+                    "{} BETWEEN ${} AND ${}",
+                    cond.field,
+                    param_val - 2,
+                    param_val - 1
+                )
+            }
+            Operator::IsNull => {
+                format!("{} IS NULL", cond.field)
+            }
+            Operator::IsNotNull => {
+                format!("{} IS NOT NULL", cond.field)
+            }
         };
         clauses.push(clause);
     }
 
     if clauses.is_empty() {
-        "".to_string()
+        ("".to_string(), values)
     } else {
-        format!("WHERE {}", clauses.join(" AND "))
+        (format!("WHERE {}", clauses.join(" AND ")), values)
     }
 }
 
@@ -102,21 +159,5 @@ pub fn generate_create_table_query(table_name: String, cols: Vec<Column>) -> Str
         "CREATE TABLE IF NOT EXISTS {} ({});",
         table_name,
         build_cols_query(cols)
-    )
-}
-
-pub fn generate_select_table_query(table_name: String, where_cond: Vec<Condition>) -> String {
-    format!(
-        "SELECT * FROM {} {}",
-        table_name,
-        build_where_clause(where_cond)
-    )
-}
-
-pub fn generate_delete_query<T: Display>(table_name: String, where_cond: Vec<Condition>) -> String {
-    format!(
-        "DELETE FROM {} {}",
-        table_name,
-        build_where_clause(where_cond)
     )
 }

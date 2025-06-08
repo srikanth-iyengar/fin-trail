@@ -8,7 +8,9 @@ pub fn HomeLayout() -> impl IntoView {
     view! {
         <div class="home-layout">
             <SideBar />
-            <Outlet />
+            <div>
+                <Outlet />
+            </div>
         </div>
     }
 }
