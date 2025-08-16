@@ -1,3 +1,4 @@
+use common::table::Column;
 use sqlx::{Connection, SqliteConnection, SqlitePool};
 
 use super::driver::{generate_create_table_query, Driver, DriverError};
@@ -29,7 +30,7 @@ impl Driver for SqliteDriver {
     async fn create_table(
         &mut self,
         table_name: String,
-        cols: Vec<super::driver::Column<'_>>,
+        cols: Vec<Column<'_>>,
     ) -> Option<DriverError> {
         let query = generate_create_table_query(table_name, cols);
         let result = sqlx::query(query.as_str()).execute(&self.pool).await;

@@ -4,6 +4,7 @@ mod hooks;
 mod routes;
 mod store;
 mod utils;
+mod dto;
 
 use app::*;
 

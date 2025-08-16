@@ -2,14 +2,12 @@ use std::sync::{Arc, LazyLock};
 use tokio::sync::Mutex;
 
 use crate::{
-    db::{postgres::PostgresDriver, sqlite::SqliteDriver},
+    db::postgres::PostgresDriver,
     match_driver,
 };
 
-use super::{
-    driver::Driver,
-    table::{ACCOUNT_TB, ACC_TABLE, REC_TX_TABLE, REC_TX_TB, TRANSACTION_TB, TX_TABLE},
-};
+use super::driver::Driver;
+use common::table::{ACCOUNT_TB, ACC_TABLE, REC_TX_TABLE, REC_TX_TB, TRANSACTION_TB, TX_TABLE};
 
 pub enum DbProvider {
     #[cfg(target_os = "android")]

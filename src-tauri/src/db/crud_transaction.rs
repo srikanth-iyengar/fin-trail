@@ -1,14 +1,12 @@
-use std::time::{SystemTime, UNIX_EPOCH};
-
-use uuid::Uuid;
-
-use super::driver::Value;
+use super::provider::get_driver;
 use super::provider::DbProvider;
-use super::{driver::Condition, provider::get_driver};
 use crate::db::driver::build_where_clause;
 use crate::db::provider::SqlxType;
-use crate::db::table::{Transaction, TRANSACTION_TB};
 use crate::match_driver;
+use common::table::{Condition, Value};
+use common::table::{Transaction, TRANSACTION_TB};
+use std::time::{SystemTime, UNIX_EPOCH};
+use uuid::Uuid;
 
 #[tauri::command]
 pub async fn add_transaction(
@@ -77,9 +75,36 @@ pub async fn fetch_transaction(filter: Vec<Condition>) -> Vec<Transaction> {
 
     let mut locked_driver = driver.lock().await;
     match_driver!(&mut *locked_driver, driver -> {
-        let transactions: Vec<Transaction> = query.fetch_all(&driver.pool).await.unwrap_or(vec![]);
-        result = transactions;
+        let transactions: Result<Vec<Transaction>, sqlx::Error> = query.fetch_all(&driver.pool).await;
+        result = transactions.unwrap_or_default();
     });
 
     result
+}
+
+#[tauri::command]
+pub async fn fetch_transaction_count() -> Result<(i64, i64, i64), String> {
+    let query_tmpl = format!(r#"
+    SELECT
+        COUNT(*) AS total,
+        SUM(CASE WHEN direction = true THEN 1 ELSE 0 END) AS inbound,
+        SUM(CASE WHEN direction = false THEN 1 ELSE 0 END) AS outbound
+    FROM {TRANSACTION_TB};
+    "#);
+    let mut result = (0_i64, 0_i64, 0_i64);
+
+    let driver = get_driver(None).await;
+
+    let mut locked_driver = driver.lock().await;
+
+    match_driver!(&mut *locked_driver, driver -> {
+        let count: (i64, i64, i64) = sqlx::query_as(&query_tmpl)
+            .fetch_one(&driver.pool)
+            .await
+            .map_err(|e| e.to_string())?;
+        result = count;
+    });
+
+
+    Ok(result)
 }

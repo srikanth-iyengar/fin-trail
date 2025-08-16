@@ -1,8 +1,8 @@
 use super::provider::get_driver;
 use super::provider::DbProvider;
-use super::table::ACCOUNT_TB;
-use super::table::TRANSACTION_TB;
 use crate::match_driver;
+use common::table::ACCOUNT_TB;
+use common::table::TRANSACTION_TB;
 
 #[tauri::command]
 pub async fn net_worth() -> Result<f64, String> {

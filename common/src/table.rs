@@ -1,14 +1,48 @@
 use serde::{Deserialize, Serialize};
 
-use super::driver::Column;
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum Value {
+    StringVal(String),
+    Number(i64),
+    Boolean(bool),
+}
 
-pub(super) const TRANSACTION_TB: &str = "fin_transaction";
-pub(super) const ACCOUNT_TB: &str = "fin_account";
-pub(super) const REC_TX_TB: &str = "fin_recurrenttransaction";
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum Operator {
+    Eq(Value),
+    Neq(Value),
+    Gt(Value),
+    Gte(Value),
+    Lt(Value),
+    Lte(Value),
+    Like(Value),
+    In(Value),
+    Between(Value, Value),
+    IsNull,
+    IsNotNull,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Condition {
+    pub field: String,
+    pub operator: Operator,
+}
+
+#[derive(Clone)]
+pub struct Column<'a> {
+    pub field_name: &'a str,
+    pub is_primary_key: bool,
+    pub is_not_null: bool,
+    pub data_type: &'a str,
+}
+
+pub const TRANSACTION_TB: &str = "fin_transaction";
+pub const ACCOUNT_TB: &str = "fin_account";
+pub const REC_TX_TB: &str = "fin_recurrenttransaction";
 
 pub const DOUBLE: &str = "double precision";
 
-#[derive(Serialize, Deserialize, sqlx::FromRow)]
+#[derive(Serialize, Deserialize, sqlx::FromRow, Clone, Debug)]
 pub struct Transaction {
     pub tx_id: String,
     pub ts: i64,
@@ -23,7 +57,7 @@ pub struct Account {
     acc_id: String,
 }
 
-pub(super) const TX_TABLE: [Column; 7] = [
+pub const TX_TABLE: [Column; 7] = [
     Column {
         field_name: "tx_id",
         data_type: "varchar(100)",
@@ -68,7 +102,7 @@ pub(super) const TX_TABLE: [Column; 7] = [
     },
 ];
 
-pub(super) const ACC_TABLE: [Column; 4] = [
+pub const ACC_TABLE: [Column; 4] = [
     Column {
         field_name: "acc_id",
         data_type: "varchar(100)",
@@ -95,7 +129,7 @@ pub(super) const ACC_TABLE: [Column; 4] = [
     },
 ];
 
-pub(super) const REC_TX_TABLE: [Column; 4] = [
+pub const REC_TX_TABLE: [Column; 4] = [
     Column {
         field_name: "cron_expr",
         data_type: "varchar(40)",

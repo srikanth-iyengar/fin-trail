@@ -1,3 +1,4 @@
+use common::table::{Column, Condition, Operator, Value};
 use std::future::Future;
 
 use serde::{Deserialize, Serialize};
@@ -8,42 +9,6 @@ pub enum DriverError {
     NoRecordFound,
     UpdateError,
     UnknownError,
-}
-
-#[derive(Clone)]
-pub struct Column<'a> {
-    pub field_name: &'a str,
-    pub is_primary_key: bool,
-    pub is_not_null: bool,
-    pub data_type: &'a str,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum Value {
-    StringVal(String),
-    Number(i64),
-    Boolean(bool),
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum Operator {
-    Eq(Value),
-    Neq(Value),
-    Gt(Value),
-    Gte(Value),
-    Lt(Value),
-    Lte(Value),
-    Like(Value),
-    In(Value),
-    Between(Value, Value),
-    IsNull,
-    IsNotNull,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Condition {
-    pub field: String,
-    pub operator: Operator,
 }
 
 pub trait Driver {
@@ -57,7 +22,7 @@ pub trait Driver {
 pub fn build_where_clause(conditions: Vec<Condition>) -> (String, Vec<Value>) {
     let mut clauses = Vec::new();
 
-    let mut param_val = 1;
+    let mut param_val = 0;
     let mut values: Vec<Value> = Vec::new();
     for cond in conditions {
         let clause = match cond.operator {

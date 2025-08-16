@@ -2,7 +2,7 @@ pub mod db;
 pub mod store_comm;
 
 use db::crud::{net_worth, transaction_amount_over_period};
-use db::crud_transaction::{add_transaction, fetch_transaction};
+use db::crud_transaction::{add_transaction, fetch_transaction, fetch_transaction_count};
 use db::provider::{get_driver, initialize_tables, is_db_connected};
 use tauri_plugin_os::platform;
 use tauri_plugin_store::StoreExt;
@@ -45,6 +45,7 @@ pub fn run() {
             transaction_amount_over_period,
             add_transaction,
             fetch_transaction,
+            fetch_transaction_count
         ])
         .setup(|app| {
             let result = app.store("default.json");

@@ -6,4 +6,3 @@ pub mod general_macros;
 pub mod postgres;
 pub mod provider;
 pub mod sqlite;
-pub mod table;

@@ -21,6 +21,8 @@ chrono = "0.4.41"
 leptos-chartistry = "0.2.1"
 leptos_meta = { version = "0.8.2", features=[] }
 leptos-fetch = { version = "0.4.2", features=[ "devtools" ] }
+common = { path="./common" }
+leptos-struct-table = "0.15.0"
 
 [workspace]
-members = [ "mini-query","src-tauri"]
+members = [ "common", "mini-query","src-tauri"]
